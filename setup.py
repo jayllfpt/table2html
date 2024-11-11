@@ -15,14 +15,21 @@ def load_requirements(filename='requirements.txt'):
 
 setup(
     name="table2html",
-    include_package_data=True,
-    version="1.0.3",
+    version="1.0.0",
     author="TraiPPN",
     license='Apache License 2.0',
     author_email="phamphungoctraivl@gmail.com",
     description="Detect and convert table image to html table",
+    packages=find_packages(include=['table2html', 'table2html.*']),
+    package_data={
+        'table2html': [
+            'models/*.pt',
+            'models/*.onnx',
+            'source/*.py',
+        ],
+    },
+    include_package_data=True,
     install_requires=load_requirements(),
-    packages=find_packages(),
     python_requires='>=3.7',
     long_description=description,
     long_description_content_type="text/markdown"

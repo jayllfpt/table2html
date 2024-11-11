@@ -1,16 +1,14 @@
-from source.table_detector import TableDetector
-from source.structure_detector import StructureDetector
-from source.ocr_engine import OCREngine
-from source.table_processor import TableProcessor
-from source.utils import generate_html_table, load_image, visualize_boxes
+import os
+from .source import *
 
 class Table2HTML:
     def __init__(self):
         # Initialize components
-        self.table_detector = TableDetector(model_path=r"models\det_table_v0.pt")
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        self.table_detector = TableDetector(model_path=os.path.join(current_dir, "models/det_table_v0.pt"))
         self.structure_detector = StructureDetector(
-            row_model_path=r'models\det_row_v0.onnx', 
-            column_model_path=r'models\det_col_v0.onnx'
+            row_model_path=os.path.join(current_dir, "models/det_row_v0.onnx"),
+            column_model_path=os.path.join(current_dir, "models/det_col_v0.onnx")
         )
         self.ocr_engine = OCREngine()
         self.processor = TableProcessor()
@@ -50,13 +48,3 @@ class Table2HTML:
         self.html = generate_html_table(self.cells, num_rows, num_cols)
         # Generate and return HTML table
         return self.cells, self.html
-
-if __name__ == "__main__":
-    image_path = r'images\sample.jpg'
-    table2html = Table2HTML()
-    cells, html = table2html(load_image(image_path))
-    print(cells)
-    print(html)
-    # Save HTML table to file
-    with open('output_table.html', 'w') as f:
-        f.write(html)
