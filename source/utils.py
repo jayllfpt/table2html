@@ -41,12 +41,12 @@ def generate_html_table(cells, num_rows, num_cols):
     table_data = [['' for _ in range(num_cols)] for _ in range(num_rows)]
 
     # Map each cell's text to the correct table position
-    print("Mapping Cells to Rows and Columns:")
+    # print("Mapping Cells to Rows and Columns:")
     for cell in cells:
         row = cell['row']
         col = cell['column']
         text = cell.get('text', '')
-        print(f"Cell at (row={row}, col={col}): {text}")
+        # print(f"Cell at (row={row}, col={col}): {text}")
         table_data[row][col] = text
 
     # Build the HTML table

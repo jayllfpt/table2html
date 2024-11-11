@@ -15,7 +15,7 @@ class TableProcessor:
                 cells.append({
                     'row': row_idx,
                     'column': col_idx,
-                    'cell_coords': (x1, y1, x2, y2)
+                    'box': (x1, y1, x2, y2)
                 })
         return cells
 
@@ -24,7 +24,7 @@ class TableProcessor:
         Assign recognized text to cells based on whether the center of the text box lies within the cell.
 
         Parameters:
-        - cells: List of cell dictionaries with 'cell_coords'.
+        - cells: List of cell dictionaries with 'box'.
         - text_boxes: List of dictionaries with 'box', 'text', and 'center' keys.
         - margin: Margin to expand cell boundaries (default is 5 pixels).
 
@@ -32,14 +32,14 @@ class TableProcessor:
         - Cells with added 'text' field containing OCR results.
         """
         for cell_idx, cell in enumerate(cells):
-            x1_cell, y1_cell, x2_cell, y2_cell = cell['cell_coords']
+            x1_cell, y1_cell, x2_cell, y2_cell = cell['box']
             # Expand cell boundaries
             x1_cell -= margin
             y1_cell -= margin
             x2_cell += margin
             y2_cell += margin
             cell_texts = []
-            print(f"\nProcessing Cell {cell_idx} with expanded coordinates: ({x1_cell}, {y1_cell}, {x2_cell}, {y2_cell})")
+            # print(f"\nProcessing Cell {cell_idx} with expanded coordinates: ({x1_cell}, {y1_cell}, {x2_cell}, {y2_cell})")
 
             for tb_idx, text_box in enumerate(text_boxes):
                 x_center, y_center = text_box['center']
@@ -48,12 +48,12 @@ class TableProcessor:
 
                 # Check if the center lies within the expanded cell
                 if (x1_cell <= x_center <= x2_cell) and (y1_cell <= y_center <= y2_cell):
-                    print(f" - Text Box {tb_idx} with center ({x_center}, {y_center}) assigned to Cell {cell_idx}")
-                    print(f"   Text: {text}")
+                    # print(f" - Text Box {tb_idx} with center ({x_center}, {y_center}) assigned to Cell {cell_idx}")
+                    # print(f"   Text: {text}")
                     cell_texts.append(text)
 
             # Join all texts assigned to this cell
             cell['text'] = ' '.join(cell_texts).strip()
-            print(f"Cell {cell_idx} text: '{cell['text']}'")
+            # print(f"Cell {cell_idx} text: '{cell['text']}'")
 
         return cells

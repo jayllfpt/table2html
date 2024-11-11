@@ -41,23 +41,22 @@ class Table2HTML:
         text_boxes = self.ocr_engine(image)
         
         # Assign text to cells
-        cells = self.processor.assign_text_to_cells(cells, text_boxes)
+        self.cells = self.processor.assign_text_to_cells(cells, text_boxes)
         
         # Determine the number of rows and columns
-        num_rows = max((cell['row'] for cell in cells), default=0) + 1
-        num_cols = max((cell['column'] for cell in cells), default=0) + 1
+        num_rows = max((cell['row'] for cell in self.cells), default=0) + 1
+        num_cols = max((cell['column'] for cell in self.cells), default=0) + 1
         
+        self.html = generate_html_table(self.cells, num_rows, num_cols)
         # Generate and return HTML table
-        return generate_html_table(cells, num_rows, num_cols)
+        return self.cells, self.html
 
 if __name__ == "__main__":
     image_path = r'images\sample.jpg'
     table2html = Table2HTML()
-    html = table2html(load_image(image_path))
+    cells, html = table2html(load_image(image_path))
+    print(cells)
     print(html)
     # Save HTML table to file
-    output_path = 'output_table.html'
-
-    with open(output_path, 'w') as f:
+    with open('output_table.html', 'w') as f:
         f.write(html)
-    print(f"HTML table saved to {output_path}")
