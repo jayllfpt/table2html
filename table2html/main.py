@@ -7,8 +7,8 @@ class Table2HTML:
         current_dir = os.path.dirname(os.path.abspath(__file__))
         self.table_detector = TableDetector(model_path=os.path.join(current_dir, "models/det_table_v0.pt"))
         self.structure_detector = StructureDetector(
-            row_model_path=os.path.join(current_dir, "models/det_row_v0.onnx"),
-            column_model_path=os.path.join(current_dir, "models/det_col_v0.onnx")
+            row_model_path=os.path.join(current_dir, "models/det_row_v0.pt"),
+            column_model_path=os.path.join(current_dir, "models/det_col_v0.pt")
         )
         self.ocr_engine = OCREngine()
         self.processor = TableProcessor()
