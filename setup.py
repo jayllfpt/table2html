@@ -1,24 +1,19 @@
-import setuptools
-from io import open
+from setuptools import setup, find_packages
+import os
 
 
 with open("README.md", "r", encoding="utf-8") as file:
     description = file.read()
 
 
-def load_requirements(file_list=None):
-    if file_list is None:
-        file_list = ['requirements.txt']
-    if isinstance(file_list, str):
-        file_list = [file_list]
-    requirements = []
-    for file in file_list:
-        with open(file, encoding="utf-8-sig") as f:
-            requirements.extend(f.readlines())
-    return requirements
+def load_requirements(filename='requirements.txt'):
+    if os.path.exists(filename):
+        with open(filename) as f:
+            return [line.strip() for line in f if line.strip() and not line.startswith('#')]
+    return []
 
 
-setuptools.setup(
+setup(
     name="table2html",
     include_package_data=True,
     version="1.0.0",
@@ -26,8 +21,8 @@ setuptools.setup(
     license='Apache License 2.0',
     author_email="phamphungoctraivl@gmail.com",
     description="Detect and convert table image to html table",
-    install_requires=load_requirements('requirements.txt'),
-    packages=setuptools.find_packages(),
+    install_requires=load_requirements(),
+    packages=find_packages(),
     python_requires='>=3.7',
     long_description=description,
     long_description_content_type="text/markdown"
