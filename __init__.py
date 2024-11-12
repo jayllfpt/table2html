@@ -1,1 +1,0 @@
-from .table2html import Table2HTML
