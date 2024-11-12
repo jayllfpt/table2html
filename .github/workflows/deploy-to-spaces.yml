@@ -16,4 +16,4 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          git push https://jayllfpt:$HF_TOKEN@huggingface.co/spaces/jayllfpt/table2html main
+          git push https://jayllfpt:$HF_TOKEN@huggingface.co/spaces/jayllfpt/table2html hfspace:main
