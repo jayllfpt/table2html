@@ -4,7 +4,7 @@ class TableDetector:
     def __init__(self, model_path):
         self.model = YOLO(model_path, task='detect')
     
-    def detect(self, image):
+    def __call__(self, image):
         """
         Detect table in the image
         Args:

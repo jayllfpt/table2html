@@ -19,7 +19,7 @@ class TableProcessor:
                 })
         return cells
 
-    def assign_text_to_cells(self, cells, text_boxes, margin=5):
+    def assign_text_to_cells(self, cells, text_boxes, margin=2):
         """
         Assign recognized text to cells based on whether the center of the text box lies within the cell.
 
@@ -39,21 +39,16 @@ class TableProcessor:
             x2_cell += margin
             y2_cell += margin
             cell_texts = []
-            # print(f"\nProcessing Cell {cell_idx} with expanded coordinates: ({x1_cell}, {y1_cell}, {x2_cell}, {y2_cell})")
 
             for tb_idx, text_box in enumerate(text_boxes):
                 x_center, y_center = text_box['center']
                 text = text_box['text']
-                x1_text, y1_text, x2_text, y2_text = text_box['box']
 
                 # Check if the center lies within the expanded cell
                 if (x1_cell <= x_center <= x2_cell) and (y1_cell <= y_center <= y2_cell):
-                    # print(f" - Text Box {tb_idx} with center ({x_center}, {y_center}) assigned to Cell {cell_idx}")
-                    # print(f"   Text: {text}")
                     cell_texts.append(text)
 
             # Join all texts assigned to this cell
             cell['text'] = ' '.join(cell_texts).strip()
-            # print(f"Cell {cell_idx} text: '{cell['text']}'")
 
         return cells

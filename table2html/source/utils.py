@@ -1,7 +1,10 @@
 import cv2
 
+def crop_image(image, bbox):
+    """Crop image to bounding box"""
+    return image[bbox[1]:bbox[3], bbox[0]:bbox[2]]
 
-def visualize_boxes(image, boxes, color):
+def visualize_boxes(image, boxes, color = (0, 0, 255), thickness = 1):
     """
     Visualize bounding boxes on the image.
 
