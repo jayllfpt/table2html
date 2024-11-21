@@ -35,7 +35,7 @@ cv2.imwrite(
 ```
 Table detection result:
 
-![Table Detection Example](table2html\images\table_detection.jpg)
+![Table Detection Example](table2html/images/table_detection.jpg)
 
 ### Structure Detection
 ```python
@@ -66,7 +66,7 @@ with open('table.html', 'w') as f:
 
 Structure detection result:
 
-![Structure Detection Example](table2html\images\table_cells.jpg)
+![Structure Detection Example](table2html/images/table_cells.jpg)
 
 ### Full Pipeline
 **Note:** The cell coordinates are relative to the cropped table image.
