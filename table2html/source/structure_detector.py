@@ -3,8 +3,8 @@ import numpy as np
 
 class StructureDetector:
     def __init__(self, row_model_path, column_model_path):
-        self.row_model = YOLO(row_model_path, task='detect')
-        self.column_model = YOLO(column_model_path, task='detect')
+        self.row_model = YOLO(row_model_path)
+        self.column_model = YOLO(column_model_path)
 
     def _detect_elements(self, image, model):
         """Helper method to detect elements using specified model"""
