@@ -79,32 +79,46 @@ def main():
     with col2:
         st.subheader("Configuration")
 
-        # Model selection option
-        model_option = st.radio(
-            "Table Detection Model",
-            options=["default", "custom"],
-            horizontal=True
-        )
+        # Create columns for model configurations
+        model_cols = st.columns(3)  # Create 3 equal columns
+        model_paths = {}
 
-        # Model path based on selection
-        if model_option == "default":
-            # Replace with your default model path
-            model_path = "models/table_detection_v0.pt"
-            st.info(f"Using default model: {model_path}")
-        else:
-            model_upload = st.file_uploader(
-                "Choose Model File (.pt)",
-                type=['pt']
-            )
-            if model_upload:
-                # Save uploaded model to temporary file
-                with tempfile.NamedTemporaryFile(delete=False, suffix='.pt') as tmp_file:
-                    tmp_file.write(model_upload.getvalue())
-                    model_path = tmp_file.name
-            else:
-                model_path = None
-                st.warning("Please upload a model file")
+        # Model selection options
+        model_types = ["Table Detection", "Column Detection", "Row Detection"]
 
+        for idx, model_type in enumerate(model_types):
+            with model_cols[idx]:  # Use each column for a model type
+                key_prefix = model_type.lower().replace(" ", "_")
+                st.markdown(f"**{model_type} Model**")
+
+                model_option = st.radio(
+                    f"Choose {model_type} Model",
+                    options=["default", "custom"],
+                    horizontal=True,
+                    key=f"{key_prefix}_option"
+                )
+
+                if model_option == "default":
+                    default_path = f"models/{key_prefix}.pt"
+                    model_paths[key_prefix] = default_path
+                    st.info(f"Using default model: {default_path}")
+                else:
+                    model_upload = st.file_uploader(
+                        f"Choose {model_type} Model File (.pt)",
+                        type=['pt'],
+                        key=f"{key_prefix}_upload"
+                    )
+                    if model_upload:
+                        with tempfile.NamedTemporaryFile(delete=False, suffix='.pt') as tmp_file:
+                            tmp_file.write(model_upload.getvalue())
+                            model_paths[key_prefix] = tmp_file.name
+                    else:
+                        model_paths[key_prefix] = None
+                        st.warning(
+                            f"Please upload a {model_type.lower()} model file")
+
+        # Padding input below the model configurations
+        st.markdown("---")  # Add a separator
         table_crop_padding = st.number_input(
             "Table Crop Padding",
             value=15,
@@ -112,8 +126,8 @@ def main():
             max_value=100
         )
 
-    # Process image when uploaded
-    if uploaded_file is not None and model_path is not None:
+    # Update the condition to check all model paths
+    if uploaded_file is not None and all(model_paths.values()):
         file_bytes = np.asarray(
             bytearray(uploaded_file.read()), dtype=np.uint8)
         image = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
@@ -124,19 +138,26 @@ def main():
                 start_time = time.time()
 
                 try:
-                    process_image(image, model_path, table_crop_padding)
+                    # Update process_image call to include all model paths
+                    process_image(
+                        image, model_paths["table_detection"], table_crop_padding)
 
-                    # Clean up temporary file if using custom model
-                    if model_option == "custom" and model_upload:
-                        os.unlink(model_path)
+                    # Clean up temporary files if using custom models
+                    for model_type, path in model_paths.items():
+                        if f"{model_type}_option" in st.session_state and \
+                           st.session_state[f"{model_type}_option"] == "custom":
+                            os.unlink(path)
 
                     execution_time = time.time() - start_time
                     st.success(
                         f"Processing completed in {execution_time:.2f} seconds")
                 except Exception as e:
                     st.error(f"Error processing image: {str(e)}")
-                    if model_option == "custom" and model_upload:
-                        os.unlink(model_path)
+                    # Clean up temporary files on error
+                    for model_type, path in model_paths.items():
+                        if f"{model_type}_option" in st.session_state and \
+                           st.session_state[f"{model_type}_option"] == "custom":
+                            os.unlink(path)
 
         # Bottom container - Results
         if len(st.session_state.cropped_tables) > 0:
