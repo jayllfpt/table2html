@@ -12,11 +12,13 @@ jobs:
         with:
           fetch-depth: 1
           ref: hfspace
+          lfs: true
 
       - name: Configure Git
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
+          git lfs install
 
       - name: Push to Space
         env:
@@ -25,4 +27,5 @@ jobs:
           git checkout --orphan temp_branch
           git add -A
           git commit -m "Deploy to Space"
+          git lfs push --all https://jayllfpt:$HF_TOKEN@huggingface.co/spaces/jayllfpt/table2html temp_branch
           git push -f https://jayllfpt:$HF_TOKEN@huggingface.co/spaces/jayllfpt/table2html temp_branch:main
