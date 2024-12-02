@@ -13,7 +13,7 @@ class Table2HTML:
         current_dir = os.path.dirname(os.path.abspath(__file__))
         if not len(table_detection_model_path):
             table_detection_model_path = os.path.join(
-                current_dir, "models/det_table_v0.pt")
+                current_dir, "models/det_table_v1.pt")
         if not len(row_detection_model_path):
             row_detection_model_path = os.path.join(
                 current_dir, "models/det_row_v0.pt")
