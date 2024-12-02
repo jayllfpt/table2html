@@ -5,38 +5,39 @@ from .source import *
 class Table2HTML:
     def __init__(
         self,
-        table_detection_model_path="",
-        row_detection_model_path="",
-        column_detection_model_path=""
+        table_detection_config: dict,
+        row_detection_config: dict,
+        column_detection_config: dict
     ):
         # Initialize components
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        if not len(table_detection_model_path):
-            table_detection_model_path = os.path.join(
+        # Set default model paths if not provided in configs
+        if "model_path" not in table_detection_config or not table_detection_config["model_path"]:
+            table_detection_config["model_path"] = os.path.join(
                 current_dir, "models/det_table_v1.pt")
-        if not len(row_detection_model_path):
-            row_detection_model_path = os.path.join(
+        if "model_path" not in row_detection_config or not row_detection_config["model_path"]:
+            row_detection_config["model_path"] = os.path.join(
                 current_dir, "models/det_row_v0.pt")
-        if not len(column_detection_model_path):
-            column_detection_model_path = os.path.join(
+        if "model_path" not in column_detection_config or not column_detection_config["model_path"]:
+            column_detection_config["model_path"] = os.path.join(
                 current_dir, "models/det_col_v0.pt")
 
-        self.table_detector = TableDetector(table_detection_model_path)
+        self.table_detector = TableDetector(table_detection_config)
         self.structure_detector = StructureDetector(
-            row_model_path=row_detection_model_path,
-            column_model_path=column_detection_model_path
+            row_config=row_detection_config,
+            column_config=column_detection_config
         )
         self.ocr_engine = OCREngine()
         self.processor = TableProcessor()
 
     def TableDetect(self, image):
-        results = []
         tables = self.table_detector(image)
-        for table in tables:
-            results.append({
+        return [
+            {
                 "table_bbox": table,
-            })
-        return results
+            }
+            for table in tables
+        ]
 
     def StructureDetect(self, table_image):
         # Detect rows and columns
@@ -77,7 +78,7 @@ class Table2HTML:
         """
         tables = self.TableDetect(image)
         if not len(tables):
-            return None
+            return []
         extracted_tables = []
         for table in tables:
             table_image = crop_image(

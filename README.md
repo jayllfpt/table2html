@@ -13,11 +13,33 @@ pip install table2html
 ### Initialize
 ```python
 from table2html import Table2HTML
-table2html = Table2HTML()
+
+table_config = {
+    "model_path": r"table2html\models\det_table_v1.pt",
+    "confidence_threshold": 0.25,
+    "iou_threshold": 0.7,
+}
+
+row_config = {
+    "model_path": r"table2html\models\det_row_v0.pt",
+    "confidence_threshold": 0.25,
+    "iou_threshold": 0.7,
+    "task": "detect",
+}
+
+column_config = {
+    "model_path": r"table2html\models\det_col_v0.pt",
+    "confidence_threshold": 0.25,
+    "iou_threshold": 0.7,
+    "task": "detect",
+}
+
+table2html = Table2HTML(table_config, row_config, column_config)
 ```
 
 ### Table Detection
 ```python
+image = cv2.imread(r"table2html\images\sample.jpg")
 detection_data = table2html.TableDetect(image)
 # Output: [{"table_bbox": Tuple[int]}]
 
@@ -73,7 +95,8 @@ HTML output: [extracted html](table2html/images/table_0.html).
 ### Full Pipeline
 **Note:** The cell coordinates are relative to the cropped table image.
 ```python
-data = table2html(image)
+table_crop_padding = 15
+detection_data = table2html(image, table_crop_padding)
 # Output: [{
 #   "table_bbox": Tuple[int],
 #   "cells": List[Dict],
@@ -81,10 +104,31 @@ data = table2html(image)
 #   "num_cols": int,
 #   "html": str
 # }]
+
+for i, data in enumerate(detection_data):
+    table_image = crop_image(image, data["table_bbox"], table_crop_padding)
+    cv2.imwrite(
+        "table_detection.jpg",
+        visualize_boxes(
+            image,
+            [data["table_bbox"]],
+            color=(0, 0, 255),
+            thickness=1
+        )
+    )
+    cv2.imwrite(
+        "structure_detection.jpg",
+        visualize_boxes(
+            table_image,
+            [cell['box'] for cell in data['cells']],
+            color=(0, 255, 0),
+            thickness=1
+        )
+    )
+
+    with open(f"table_{i}.html", "w") as f:
+        f.write(data["html"])
 ```
-
-
-
 
 ## Input
 - `image`: numpy.ndarray (OpenCV/cv2 image format)

@@ -1,11 +1,14 @@
 from ultralytics import YOLO
 
+DEFAULT_CONF = 0.25
+DEFAULT_IOU = 0.7
+
 
 class TableDetector:
-    def __init__(self, model_path, confidence_threshold=0.25, iou_threshold=0.7):
-        self.model = YOLO(model_path, task='detect')
-        self.confidence_threshold = confidence_threshold
-        self.iou_threshold = iou_threshold
+    def __init__(self, config: dict):
+        self.model = YOLO(config["model_path"], task='detect')
+        self.confidence_threshold = config.get("confidence_threshold", DEFAULT_CONF)
+        self.iou_threshold = config.get("iou_threshold", DEFAULT_IOU)
 
     def __call__(self, image):
         """
