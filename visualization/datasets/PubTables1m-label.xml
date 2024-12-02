@@ -13,19 +13,6 @@
    </size>
    <segmented>0</segmented>
    <object>
-      <name>table</name>
-      <pose>Frontal</pose>
-      <truncated>0</truncated>
-      <difficult>0</difficult>
-      <occluded>0</occluded>
-      <bndbox>
-         <xmin>37.3131</xmin>
-         <ymin>36.3933</ymin>
-         <xmax>641.6990</xmax>
-         <ymax>141.9482</ymax>
-      </bndbox>
-   </object>
-   <object>
       <name>table spanning cell</name>
       <pose>Frontal</pose>
       <truncated>0</truncated>
@@ -36,32 +23,6 @@
          <ymin>36.3933</ymin>
          <xmax>77.8210</xmax>
          <ymax>96.1403</ymax>
-      </bndbox>
-   </object>
-   <object>
-      <name>table row</name>
-      <pose>Frontal</pose>
-      <truncated>0</truncated>
-      <difficult>0</difficult>
-      <occluded>0</occluded>
-      <bndbox>
-         <xmin>37.3131</xmin>
-         <ymin>36.3933</ymin>
-         <xmax>641.6990</xmax>
-         <ymax>56.2741</ymax>
-      </bndbox>
-   </object>
-   <object>
-      <name>table column</name>
-      <pose>Frontal</pose>
-      <truncated>0</truncated>
-      <difficult>0</difficult>
-      <occluded>0</occluded>
-      <bndbox>
-         <xmin>37.3131</xmin>
-         <ymin>36.3933</ymin>
-         <xmax>77.8210</xmax>
-         <ymax>141.9482</ymax>
       </bndbox>
    </object>
 </annotation>
