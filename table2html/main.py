@@ -32,12 +32,14 @@ class Table2HTML:
 
     def TableDetect(self, image):
         tables = self.table_detector(image)
-        return [
-            {
+        if len(tables):
+            return [
+                {
                 "table_bbox": table,
             }
-            for table in tables
-        ]
+                for table in tables
+            ]
+        return []
 
     def StructureDetect(self, table_image):
         # Detect rows and columns
