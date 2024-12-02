@@ -3,13 +3,25 @@ from table2html.source import crop_image
 from table2html import Table2HTML
 import cv2
 
+
 table_crop_padding = 15
-table2html = Table2HTML(
-    table_detection_model_path=r"D:\TraiPPN2\CAPSTONE\TNCR\sample\weights\best.pt",
-)
+
+table_config = {
+
+}
+
+row_config = {
+
+}
+
+column_config = {
+
+}
+
+table2html = Table2HTML(table_config, row_config, column_config)
 
 image = cv2.imread(
-    r"D:\TraiPPN2\CAPSTONE\PubTables-1M-Detection_Images_Val\PMC1175846_5.jpg")
+    r"C:\Users\jayll\Downloads\no_tables.jpg")
 
 detection_data = table2html(image, table_crop_padding)
 
