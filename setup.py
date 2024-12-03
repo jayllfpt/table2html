@@ -15,7 +15,7 @@ def load_requirements(filename='requirements.txt'):
 
 setup(
     name="table2html",
-    version="1.4.1",
+    version="1.4.2",
     author="TraiPPN",
     license='Apache License 2.0',
     author_email="phamphungoctraivl@gmail.com",

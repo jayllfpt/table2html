@@ -1,6 +1,9 @@
 import os
 from .source import *
 
+DEFAULT_TABLE_MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models/table_detection.pt")
+DEFAULT_ROW_MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models/row_detection.pt")
+DEFAULT_COLUMN_MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models/column_detection.pt")
 
 class Table2HTML:
     def __init__(
@@ -10,17 +13,13 @@ class Table2HTML:
         column_detection_config: dict
     ):
         # Initialize components
-        current_dir = os.path.dirname(os.path.abspath(__file__))
         # Set default model paths if not provided in configs
         if "model_path" not in table_detection_config or not table_detection_config["model_path"]:
-            table_detection_config["model_path"] = os.path.join(
-                current_dir, "models/det_table_v1.pt")
+            table_detection_config["model_path"] = DEFAULT_TABLE_MODEL_PATH
         if "model_path" not in row_detection_config or not row_detection_config["model_path"]:
-            row_detection_config["model_path"] = os.path.join(
-                current_dir, "models/det_row_v0.pt")
+            row_detection_config["model_path"] = DEFAULT_ROW_MODEL_PATH
         if "model_path" not in column_detection_config or not column_detection_config["model_path"]:
-            column_detection_config["model_path"] = os.path.join(
-                current_dir, "models/det_col_v0.pt")
+            column_detection_config["model_path"] = DEFAULT_COLUMN_MODEL_PATH
 
         self.table_detector = TableDetector(table_detection_config)
         self.structure_detector = StructureDetector(
